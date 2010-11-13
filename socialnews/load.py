@@ -37,7 +37,7 @@ profile.save()
 b.user = models.User.objects.get(id = b.user.id)
 links = []    
 for i in xrange(num_links):
-    link = models.Link.objects.create_link(user = b.user, topic = b.topic, url='http://%s%s.com'% (run_name, i), text=str(i) )
+    link = models.Link.objects.create_link(user = b.user, topic = b.topic, url='http://%s%s.com'% (run_name, i), text=str(i), summary=str(i) )
     links.append(link)
     
 for user in users:

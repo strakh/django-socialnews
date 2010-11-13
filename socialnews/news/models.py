@@ -34,7 +34,7 @@ class UserProfile(models.Model):
     karma = models.IntegerField(default = defaults.DEFAULT_PROFILE_KARMA)
     recommended_calc = models.DateTimeField(auto_now_add = 1)#when was the recommended links calculated?
     is_recommended_calc = models.BooleanField(default = False)
-    default_topic = models.ForeignKey('Topic')
+    default_topic = models.ForeignKey('Topic', null=True, blank=True)
     secret_key = models.CharField(max_length = 50)
     
     objects = UserProfileManager()
