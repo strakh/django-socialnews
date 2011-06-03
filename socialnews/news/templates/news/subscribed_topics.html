@@ -1,6 +1,7 @@
 			{% if user.is_authenticated %}
 	 		<div class="box others subscribed block">
 				<h3>Subscribed Topic </h3> 
+				{% with user.subscribeduser_set.all as subscriptions %}
 				{% if subscriptions %}
 				<ul>
 				{% for subs in subscriptions %}
@@ -12,6 +13,7 @@
 				   You are not subscribed to any topic.<a href="{% url topic_list %}"> See some?</a>
 				</div>
 				{% endif %}
+				{% endwith %}
 				
 				<div class="clear"></div>
 				<div class="sub_edit">

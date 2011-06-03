@@ -32,13 +32,9 @@ def main(request, order_by=None, override=None):
     
     links, page_data = get_paged_objects(links, request, defaults.LINKS_PER_PAGE)
     tags = Tag.objects.filter(topic__isnull = True).select_related().order_by('-updated_on')[:defaults.TAGS_ON_MAINPAGE]
-    if request.user.is_authenticated():
-        subscriptions = SubscribedUser.objects.filter(user = request.user).select_related()
-    else:
-        subscriptions = SubscribedUser.objects.get_empty_query_set()
     top_topics = Topic.objects.all().order_by('-num_links')[:defaults.TOP_TOPICS_ON_MAINPAGE]
     new_topics = Topic.objects.all().order_by('-updated_on')[:defaults.NEW_TOPICS_ON_MAINPAGE]
-    payload = {'links':links, 'tags':tags, 'subscriptions':subscriptions, 'top_topics':top_topics, 'new_topics':new_topics, 'page_data':page_data, 'page': page}
+    payload = {'links':links, 'tags':tags, 'top_topics':top_topics, 'new_topics':new_topics, 'page_data':page_data, 'page': page}
     return render(request, payload, 'news/main.html')
     
     
@@ -63,17 +59,14 @@ def topic_main(request, topic_slug, order_by = None):
         page = 'hot'
     subscribed = False
     if request.user.is_authenticated():
-        subscriptions = SubscribedUser.objects.filter(user = request.user).select_related()
         try:
             SubscribedUser.objects.get(topic = topic, user = request.user)
             subscribed = True
         except SubscribedUser.DoesNotExist:
             pass
-    else:
-        subscriptions = SubscribedUser.objects.get_empty_query_set()
     top_topics = Topic.objects.all().order_by('-num_links')[:defaults.TOP_TOPICS_ON_MAINPAGE]
     new_topics = Topic.objects.all().order_by('-updated_on')[:defaults.NEW_TOPICS_ON_MAINPAGE]
-    payload = dict(topic = topic, links = links, subscriptions=subscriptions, tags=tags, subscribed=subscribed, page_data=page_data, top_topics=top_topics, new_topics=new_topics,  page= page)
+    payload = dict(topic = topic, links = links, tags=tags, subscribed=subscribed, page_data=page_data, top_topics=top_topics, new_topics=new_topics,  page= page)
     return render(request, payload, 'news/topic_main.html')
 
 @login_required
